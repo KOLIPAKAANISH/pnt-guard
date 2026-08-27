@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PNT-Guard | Mission Control</title>
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- App -->
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <!-- ===== BOOT-UP OVERLAY ===== -->
+    <div id="bootOverlay" class="boot-overlay">
+        <div class="boot-content">
+            <div class="boot-logo">&#9678;</div>
+            <div class="boot-title">PNT-GUARD</div>
+            <div class="boot-subtitle">Multi-Source Position Fusion Engine</div>
+            <div class="boot-terminal">
+                <div class="boot-line" data-delay="0">&gt; Initializing sensor array...</div>
+                <div class="boot-line" data-delay="300">&gt; Loading fusion engine...</div>
+                <div class="boot-line" data-delay="600">&gt; Connecting to signal sources...</div>
+                <div class="boot-line" data-delay="900">&gt; Calibrating detection models...</div>
+                <div class="boot-line" data-delay="1200">&gt; SYSTEM READY</div>
+            </div>
+            <div class="boot-progress">
+                <div class="boot-progress-bar" id="bootProgressBar"></div>
+            </div>
+            <div class="boot-cursor">_</div>
+        </div>
+    </div>
+
+    <!-- ===== ALERT FLASH OVERLAY ===== -->
+    <div id="alertFlash" class="alert-flash"></div>
+
+    <!-- ===== TOP BAR ===== -->
+    <header class="topbar glass-panel">
+        <div class="topbar-left">
+            <div class="logo">
+                <span class="logo-icon">&#9678;</span>
+                <span class="logo-text">PNT-GUARD</span>
+            </div>
+            <span class="topbar-divider"></span>
+            <span class="topbar-subtitle">Multi-Source Position Fusion Engine</span>
+        </div>
+        <div class="topbar-center">
+            <span id="systemStatus" class="system-status nominal">ALL SYSTEMS NOMINAL</span>
+        </div>
+        <div class="topbar-right">
+            <span class="topbar-clock" id="liveClock">--:--:-- UTC</span>
+            <span class="topbar-separator">|</span>
+            <span class="topbar-label">UPTIME <span id="uptime">00:00:00</span></span>
+        </div>
+    </header>
+
+    <!-- ===== MAIN LAYOUT ===== -->
+    <div class="main-layout">
+
+        <!-- LEFT SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h3 class="sidebar-heading">SOURCE STATUS</h3>
+                <div id="sourceCards" class="source-cards">
+                    <div class="source-card empty">Awaiting data...</div>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3 class="sidebar-heading">FUSED POSITION</h3>
+                <div id="fusedPanel" class="fused-panel glass-card">
+                    <div class="fused-status no-fix">NO FIX</div>
+                    <div class="fused-coords">---.------ , ---.------</div>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3 class="sidebar-heading">DEVIATION TRACKER</h3>
+                <div class="chart-wrapper glass-card">
+                    <canvas id="deviationChart"></canvas>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAP -->
+        <div class="map-container">
+            <div id="map"></div>
+            <!-- Radar Sweep Overlay -->
+            <div class="radar-sweep"></div>
+            <div class="map-overlay-info glass-card">
+                <span id="mapSourceCount">0</span> sources |
+                <span id="mapEventCount">0</span> events |
+                Refresh: 3s
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== BOTTOM PANEL: EVENT LOG ===== -->
+    <div class="bottom-panel glass-panel">
+        <div class="bottom-panel-header">
+            <h3 class="sidebar-heading">EVENT LOG</h3>
+            <span id="eventCount" class="event-badge">0</span>
+        </div>
+        <div class="event-log-wrap">
+            <table class="event-table">
+                <thead>
+                    <tr>
+                        <th>TIME</th>
+                        <th>SOURCE</th>
+                        <th>EVENT</th>
+                        <th>DETAILS</th>
+                    </tr>
+                </thead>
+                <tbody id="eventBody">
+                    <tr><td colspan="4" class="empty-row">No events</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <script src="/static/dashboard.js"></script>
+</body>
+</html>
